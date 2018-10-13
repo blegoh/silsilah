@@ -40,4 +40,21 @@ class UpdateRequest extends FormRequest
             'birth_order' => 'nullable|numeric|min:1',
         ];
     }
+
+    public function validated()
+    {
+        $formData = parent::validated();
+
+        if ($formData['dod']) {
+            $formData['yod'] = substr($formData['dod'], 0, 4);
+        } else {
+            $formData['yod'] = $formData['yod'];
+        }
+
+        if ($formData['password']) {
+            $formData['password'] = bcrypt($formData['password']);
+        }
+
+        return $formData;
+    }
 }
